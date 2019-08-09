@@ -1,9 +1,11 @@
 const _ = require('lodash')
 const Cryptocurrency = require('@models/Cryptocurrency')
+const MarketQuote = require('@models/MarketQuote')
 const logger = require('@config/logger')
 
 module.exports = function getCryptocurrencyLatest(request, response) {
   const { symbol } = request.params
+
   logger.debug('[getCryptocurrencyLastest] symbol: ' + symbol)
   Cryptocurrency.findOne({ symbol }, (error, crypto) => {
     if (error) {
@@ -11,11 +13,10 @@ module.exports = function getCryptocurrencyLatest(request, response) {
         status: { code: 500 }
       })
       logger.error('[getCryptocurrencyLastest] 500 ' + error.message)
-    } else if (crypto === null || crypto.marketQuotes.length === 0) {
-      const message =
-        crypto === null
-          ? 'Cannot find BTC. May need subscription.'
-          : 'No market quotes yet for ETH'
+      return
+    }
+    if (crypto === null) {
+      const message = `Cannot find ${symbol}. May need subscription.`
       response.status(404).send({
         status: {
           code: 404,
@@ -23,14 +24,37 @@ module.exports = function getCryptocurrencyLatest(request, response) {
         }
       })
       logger.warn('[getCryptocurrencyLastest] 404: ' + message)
-    } else {
-      const latestMarketQuote = crypto.marketQuotes.slice(-1).pop()
-      const marketQuote = _.omit(latestMarketQuote.toJSON(), ['_id'])
+      return
+    }
+    MarketQuote.findOne({ symbol }, {}, { sort: { $natural: -1 } }, function(
+      error,
+      mq
+    ) {
+      if (error) {
+        response.status(500).send({
+          status: { code: 500 }
+        })
+        logger.error('[getCryptocurrencyLastest] 500 ' + error.message)
+        return
+      }
+      if (!mq) {
+        const message = 'No market quotes yet for ETH'
+        response.status(404).send({
+          status: {
+            code: 404,
+            message
+          }
+        })
+        logger.warn('[getCryptocurrencyLastest] 404: ' + message)
+        return
+      }
+
+      const marketQuote = mq.withoutSymbol
       response.status(200).send({
         status: { code: 200 },
         data: marketQuote
       })
       logger.debug('[getCryptocurrencyLastest] 200 ', marketQuote)
-    }
+    })
   })
 }

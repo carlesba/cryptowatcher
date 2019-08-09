@@ -17,7 +17,7 @@ module.exports = function getCryptocurrency(request, response) {
       })
       logger.warn('[getCryptocurrency] 404 ' + symbol)
     } else {
-      const data = _.omit(crypto.toJSON(), ['marketQuotes', 'coinMarketCapId'])
+      const data = crypto.information
 
       response.status(200).send({
         status: { code: 200 },

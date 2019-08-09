@@ -1,5 +1,5 @@
-const _ = require('lodash')
 const Cryptocurrency = require('@models/Cryptocurrency')
+const MarketQuote = require('@models/MarketQuote')
 const MarketQuotesProvider = require('@services/coinMarketCap/MarketQuotesProvider')
 const logger = require('@config/logger')
 
@@ -44,7 +44,8 @@ function update(callback) {
         )
         return
       }
-      updateMarketQuotes(marketQuotes, error => {
+
+      MarketQuote.insertMany(marketQuotes, error => {
         if (error) {
           callback(new Error(ERRORS.UNEXPECTED))
           logger.debug(
@@ -58,38 +59,6 @@ function update(callback) {
       })
     })
   })
-}
-
-function updateMarketQuotes(marketQuotes, callback) {
-  const updatePromises = Object.keys(marketQuotes).map(id => {
-    return new Promise(function(resolve) {
-      updateMarketQuote(id, marketQuotes[id], updateQuoteError => {
-        resolve(updateQuoteError)
-      })
-    })
-  })
-  Promise.all(updatePromises).then(errors => {
-    const errorsCount = _.compact(errors).length
-    if (errorsCount === 0) {
-      callback(null)
-    } else {
-      callback(ERRORS.UNEXPECTED)
-    }
-  })
-}
-
-function updateMarketQuote(id, marketQuote, callback) {
-  Cryptocurrency.updateOne(
-    { coinMarketCapId: +id },
-    { $push: { marketQuotes: marketQuote } },
-    function(error) {
-      if (error) {
-        callback(ERRORS.UNEXPECTED)
-      } else {
-        callback(null, marketQuote)
-      }
-    }
-  )
 }
 
 module.exports = {

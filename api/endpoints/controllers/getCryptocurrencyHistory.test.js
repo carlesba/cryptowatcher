@@ -1,3 +1,4 @@
+const _ = require('lodash')
 const getCryptocurrencyHistory = require('./getCryptocurrencyHistory')
 const {
   connectMockedDatabase,
@@ -5,27 +6,10 @@ const {
 } = require('@config/tests')
 const createResponseSpy = require('./utils/createResponseSpy')
 const Cryptocurrency = require('@models/Cryptocurrency')
+const MarketQuote = require('@models/MarketQuote')
 
 beforeAll(connectMockedDatabase)
 afterAll(disconnectMockedDatabase)
-
-test('Error when querying database', async done => {
-  const findOne = Cryptocurrency.findOne
-  const findOneWithError = (q, fn) => {
-    fn(new Error('something bad'))
-  }
-  Cryptocurrency.findOne = findOneWithError
-
-  const request = { params: { symbol: 'BTC' } }
-  const { response, tilDone, statusSpy, sendSpy } = createResponseSpy()
-  getCryptocurrencyHistory(request, response)
-  await tilDone
-
-  expect(sendSpy).toHaveBeenCalledWith({ status: { code: 500 } })
-  expect(statusSpy).toHaveBeenCalledWith(500)
-  Cryptocurrency.findOne = findOne
-  done()
-})
 
 test(`Requested symbol is not in the system`, async done => {
   const request = { params: { symbol: 'BTC' } }
@@ -39,19 +23,13 @@ test(`Requested symbol is not in the system`, async done => {
   expect(statusSpy).toHaveBeenCalledWith(404)
   done()
 })
-
-test(`Get history successfully`, async done => {
+test('Symbol is in the system without market quotes', async done => {
   const request = { params: { symbol: 'BTC' } }
   const { response, tilDone, statusSpy, sendSpy } = createResponseSpy()
   const crypto = {
     symbol: 'BTC',
-    coinMarketCapId: 1,
     name: 'Bitcoin',
-    marketQuotes: [
-      { price: 10300, currency: 'EUR', timestamp: '2019-08-08T07:54:39.090Z' },
-      { price: 10100, currency: 'EUR', timestamp: '2019-08-08T07:34:39.090Z' },
-      { price: 10200, currency: 'EUR', timestamp: '2019-08-08T07:14:39.090Z' }
-    ]
+    coinMarketCapId: 1
   }
   await Cryptocurrency.create(crypto)
 
@@ -60,7 +38,44 @@ test(`Get history successfully`, async done => {
 
   expect(sendSpy).toHaveBeenCalledWith({
     status: { code: 200 },
-    data: crypto.marketQuotes
+    data: []
+  })
+  expect(statusSpy).toHaveBeenCalledWith(200)
+
+  done()
+})
+
+test(`Get history successfully`, async done => {
+  const request = { params: { symbol: 'BTC' } }
+  const { response, tilDone, statusSpy, sendSpy } = createResponseSpy()
+  const marketQuotes = [
+    {
+      symbol: 'BTC',
+      price: 10300,
+      currency: 'EUR',
+      timestamp: '2019-08-08T07:54:39.090Z'
+    },
+    {
+      symbol: 'BTC',
+      price: 10100,
+      currency: 'EUR',
+      timestamp: '2019-08-08T07:34:39.090Z'
+    },
+    {
+      symbol: 'BTC',
+      price: 10200,
+      currency: 'EUR',
+      timestamp: '2019-08-08T07:14:39.090Z'
+    }
+  ]
+  await MarketQuote.insertMany(marketQuotes)
+
+  getCryptocurrencyHistory(request, response)
+  await tilDone
+
+  expect(sendSpy).toHaveBeenCalledWith({
+    status: { code: 200 },
+    data: marketQuotes.map(m => _.omit(m, ['symbol']))
   })
   expect(statusSpy).toHaveBeenCalledWith(200)
 

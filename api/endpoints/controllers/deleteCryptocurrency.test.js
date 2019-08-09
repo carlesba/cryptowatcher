@@ -37,8 +37,7 @@ test(`Delete successfully`, async done => {
   const crypto = {
     symbol,
     name: 'Bitcoin',
-    coinMarketCapId: 1,
-    marketQuotes: []
+    coinMarketCapId: 1
   }
   await Cryptocurrency.create(crypto)
   const request = { params: { symbol } }
@@ -47,9 +46,7 @@ test(`Delete successfully`, async done => {
   deleteCryptocurrency(request, response)
   await tilDone
   expect(sendSpy).toHaveBeenCalledWith({
-    status: {
-      code: 200
-    }
+    status: { code: 200 }
   })
   expect(statusSpy).toHaveBeenCalledWith(200)
   const exists = await Cryptocurrency.exists({ symbol })

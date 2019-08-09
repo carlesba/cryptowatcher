@@ -48,8 +48,8 @@ test(`Send cryptocurrency's info succesfully`, async done => {
   const { response, tilDone, statusSpy, sendSpy } = createResponseSpy()
 
   await Cryptocurrency.insertMany([
-    { name: 'Bitcoin', coinMarketCapId: 1, symbol: 'BTC', marketQuotes: [] },
-    { name: 'Ethereum', coinMarketCapId: 1027, symbol: 'ETH', marketQuotes: [] }
+    { name: 'Bitcoin', coinMarketCapId: 1, symbol: 'BTC' },
+    { name: 'Ethereum', coinMarketCapId: 1027, symbol: 'ETH' }
   ])
 
   getCryptocurrencies(request, response)

@@ -63,18 +63,20 @@ test('Get market quotes successfully', done => {
   mock
     .onGet('https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest')
     .reply(200, QUOTES_RESPONSE)
-  const expectedMarketQuotes = {
-    '1': {
+  const expectedMarketQuotes = [
+    {
+      symbol: 'BTC',
       price: QUOTES_RESPONSE.data['1'].quote.EUR.price,
       currency: 'EUR',
       timestamp: QUOTES_RESPONSE.data['1'].quote.EUR.last_updated
     },
-    '1027': {
+    {
+      symbol: 'ETH',
       price: QUOTES_RESPONSE.data['1027'].quote.EUR.price,
       currency: 'EUR',
       timestamp: QUOTES_RESPONSE.data['1027'].quote.EUR.last_updated
     }
-  }
+  ]
 
   MarketQuotesProvider.fetch(ids, (error, data) => {
     expect(data).toEqual(expectedMarketQuotes)

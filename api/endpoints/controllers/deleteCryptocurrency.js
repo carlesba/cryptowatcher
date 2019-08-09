@@ -14,11 +14,11 @@ module.exports = function postCryptocurrency(request, response) {
           message: `Couldn't unsubscribe from ${symbol}`
         }
       })
-    } else {
-      logger.info(`[deleteCryptocurrency] 200 unsubscribed from ${symbol}`)
-      response.status(200).send({
-        status: { code: 200 }
-      })
+      return
     }
+    logger.info(`[deleteCryptocurrency] 200 unsubscribed from ${symbol}`)
+    response.status(200).send({
+      status: { code: 200 }
+    })
   })
 }

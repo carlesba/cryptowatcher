@@ -19,7 +19,7 @@ module.exports = function getCryptocurrencies(request, response) {
       })
     } else {
       const data = cryptos.map(crypto => {
-        return _.omit(crypto.toJSON(), ['coinMarketCapId', 'marketQuotes'])
+        return crypto.information
       })
       response.status(200).send({
         status: { code: 200 },

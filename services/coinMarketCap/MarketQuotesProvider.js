@@ -26,8 +26,11 @@ function fetchMarketQuotes(ids, callback) {
   )
   return axios(config)
     .then(response => {
-      const marketQuotes = _.mapValues(response.data.data, value => {
+      const serverData = response.data.data
+      const marketQuotes = Object.keys(serverData).map(key => {
+        const value = serverData[key]
         return {
+          symbol: value.symbol,
           price: value.quote[REFERENCE_CURRENCY].price,
           currency: REFERENCE_CURRENCY,
           timestamp: value.quote[REFERENCE_CURRENCY].last_updated

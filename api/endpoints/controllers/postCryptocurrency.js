@@ -22,14 +22,14 @@ module.exports = function postCryptocurrency(request, response) {
     InformationProvider.fetch(symbol, function(fetchError, information) {
       if (fetchError) {
         handleFetchError(fetchError, response)
-      } else {
-        const { symbol, id, name } = information
-        Cryptocurrency.create({ symbol, coinMarketCapId: id, name }, function(
-          error
-        ) {
-          handleCryptocurrencyCreate(error, symbol, response)
-        })
+        return
       }
+      const { symbol, id, name } = information
+      Cryptocurrency.create({ symbol, coinMarketCapId: id, name }, function(
+        error
+      ) {
+        handleCryptocurrencyCreate(error, symbol, response)
+      })
     })
   })
 }

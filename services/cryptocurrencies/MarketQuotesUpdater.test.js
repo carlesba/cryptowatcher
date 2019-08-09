@@ -1,6 +1,5 @@
-const axios = require('axios')
-const MockAdapter = require('axios-mock-adapter')
 const Cryptocurrency = require('@models/Cryptocurrency')
+const MarketQuote = require('@models/MarketQuote')
 
 jest.mock('@services/coinMarketCap/MarketQuotesProvider')
 const MarketQuotesProvider = require('@services/coinMarketCap/MarketQuotesProvider')
@@ -53,18 +52,20 @@ test('CoinMarketCap has issues', done => {
 })
 test('MarketQuotes are stored succesfully', async done => {
   const spy = jest.fn()
-  const marketQuotes = {
-    '1': {
+  const marketQuotes = [
+    {
+      symbol: 'BTC',
       price: 10230,
       currency: 'EUR',
       timestamp: '2019-08-09T06:58:26.000Z'
     },
-    '1027': {
+    {
+      symbol: 'ETH',
       price: 202,
       currency: 'EUR',
       timestamp: '2019-08-09T06:58:26.000Z'
     }
-  }
+  ]
   MarketQuotesProvider.fetch.mockImplementation((ids, cb) => {
     spy(ids)
     cb(null, marketQuotes)
@@ -73,8 +74,9 @@ test('MarketQuotes are stored succesfully', async done => {
   MarketQuotesUpdater.update(async function(error) {
     expect(error).toBe(null)
     expect(spy).toHaveBeenCalledWith([1, 1027])
-    const crypto = await Cryptocurrency.findOne({ symbol: 'BTC' })
-    expect(crypto.marketQuotes.length).toBe(1)
+
+    const quotes = await MarketQuote.find({})
+    expect(quotes.length).toBe(2)
     done()
   })
 })
