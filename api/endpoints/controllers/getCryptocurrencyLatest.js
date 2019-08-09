@@ -24,7 +24,7 @@ module.exports = function getCryptocurrencyLatest(request, response) {
       })
       logger.warn('[getCryptocurrencyLastest] 404: ' + message)
     } else {
-      const latestMarketQuote = _.get(crypto, 'marketQuotes[0]')
+      const latestMarketQuote = crypto.marketQuotes.slice(-1).pop()
       const marketQuote = _.omit(latestMarketQuote.toJSON(), ['_id'])
       response.status(200).send({
         status: { code: 200 },

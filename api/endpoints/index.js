@@ -24,7 +24,9 @@ module.exports = function startServer() {
     app.use('/api', router)
 
     app.listen(process.env.EXPRESS_PORT, () => {
-      logger.info(`Express server started on port ${process.env.EXPRESS_PORT}`)
+      logger.info(
+        `[endpoints] Express server started on port ${process.env.EXPRESS_PORT}`
+      )
       resolve(app)
     })
   })

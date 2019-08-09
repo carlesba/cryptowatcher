@@ -68,9 +68,9 @@ test(`Get latest successfully`, async done => {
     coinMarketCapId: 1,
     name: 'Bitcoin',
     marketQuotes: [
-      { price: 10300, currency: 'EUR', timestamp: '2019-08-08T07:54:39.090Z' },
+      { price: 10200, currency: 'EUR', timestamp: '2019-08-08T07:14:39.090Z' },
       { price: 10100, currency: 'EUR', timestamp: '2019-08-08T07:34:39.090Z' },
-      { price: 10200, currency: 'EUR', timestamp: '2019-08-08T07:14:39.090Z' }
+      { price: 10300, currency: 'EUR', timestamp: '2019-08-08T07:54:39.090Z' }
     ]
   }
   await Cryptocurrency.create(crypto)
@@ -80,7 +80,7 @@ test(`Get latest successfully`, async done => {
 
   expect(sendSpy).toHaveBeenCalledWith({
     status: { code: 200 },
-    data: crypto.marketQuotes[0]
+    data: crypto.marketQuotes[2]
   })
   expect(statusSpy).toHaveBeenCalledWith(200)
 
