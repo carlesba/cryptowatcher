@@ -10,7 +10,7 @@ services:
       - REDIS_URL=redis://cache
       - MONGO_URL=mongodb://mongo:27017/newdock
       - EXPRESS_PORT=4000
-      - COINMARKETAPP_APIKEY=$COINMARKETAPP_APIKEY
+      - COINMARKETCAP_APIKEY=$COINMARKETCAP_APIKEY
     ports:
       - '4000:4000'
     links:

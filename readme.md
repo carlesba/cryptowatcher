@@ -1,6 +1,10 @@
-# bit2me server
+# Cryptowatch
 
 ## Run server locally
+
+Get an API key for [coinMarketCap](https://coinmarketcap.com/api/)
+
+Create a `.env` file from `.env-template` and add you coinMarketCap API key
 
 Install docker ([Visit docker.com](https://docs.docker.com/))
 
