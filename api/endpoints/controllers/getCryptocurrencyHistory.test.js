@@ -1,3 +1,4 @@
+const moment = require('moment')
 const _ = require('lodash')
 const getCryptocurrencyHistory = require('./getCryptocurrencyHistory')
 const {
@@ -45,29 +46,36 @@ test('Symbol is in the system without market quotes', async done => {
   done()
 })
 
-test(`Get history successfully`, async done => {
+test(`Get history for last 100 minutes successfully`, async done => {
   const request = { params: { symbol: 'BTC' } }
   const { response, tilDone, statusSpy, sendSpy } = createResponseSpy()
-  const marketQuotes = [
-    {
-      symbol: 'BTC',
-      price: 10300,
-      currency: 'EUR',
-      timestamp: '2019-08-08T07:54:39.090Z'
-    },
+  let marketQuotes = [
     {
       symbol: 'BTC',
       price: 10100,
-      currency: 'EUR',
-      timestamp: '2019-08-08T07:34:39.090Z'
+      currency: 'EUR'
     },
     {
       symbol: 'BTC',
       price: 10200,
-      currency: 'EUR',
-      timestamp: '2019-08-08T07:14:39.090Z'
+      currency: 'EUR'
+    },
+    {
+      symbol: 'BTC',
+      price: 10300,
+      currency: 'EUR'
     }
   ]
+  // set marketQuotes timestamp to a 75' period until now
+  // 75' is picked so 2 elements will be in the range of 100'
+  // so newest element will be the last one
+  marketQuotes = marketQuotes.map((mq, i) => {
+    const minutesAgo = (marketQuotes.length - 1 - i) * 75
+    const timestamp = moment()
+      .subtract(minutesAgo, 'minute')
+      .toISOString()
+    return { ...mq, timestamp }
+  })
   await MarketQuote.insertMany(marketQuotes)
 
   getCryptocurrencyHistory(request, response)
@@ -75,7 +83,7 @@ test(`Get history successfully`, async done => {
 
   expect(sendSpy).toHaveBeenCalledWith({
     status: { code: 200 },
-    data: marketQuotes.map(m => _.omit(m, ['symbol']))
+    data: marketQuotes.map(m => _.omit(m, ['symbol'])).slice(1, 3)
   })
   expect(statusSpy).toHaveBeenCalledWith(200)
 

@@ -1,7 +1,9 @@
-const _ = require('lodash')
+const moment = require('moment')
 const MarketQuote = require('@models/MarketQuote')
 const Cryptocurrency = require('@models/Cryptocurrency')
 const logger = require('@config/logger')
+
+const HISTORY_LIMIT_MINUTES = 100
 
 module.exports = function getCryptocurrencyHistory(request, response) {
   const { symbol } = request.params
@@ -26,7 +28,11 @@ module.exports = function getCryptocurrencyHistory(request, response) {
       return
     }
 
-    MarketQuote.find({ symbol }, (error, mqs) => {
+    const historyEdgeTimestamp = moment()
+      .subtract(HISTORY_LIMIT_MINUTES, 'minute')
+      .toISOString()
+    const query = { symbol, timestamp: { $gte: historyEdgeTimestamp } }
+    MarketQuote.find(query, (error, mqs) => {
       if (error) {
         response.status(500).send({
           status: { code: 500 }
