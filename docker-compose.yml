@@ -1,11 +1,9 @@
 version: '2'
 services:
-  app:
-    container_name: app
+  server:
+    container_name: server
     restart: unless-stopped
-    build:
-      context: .
-      dockerfile: Dockerfile
+    build: server
     environment:
       - REDIS_URL=redis://cache
       - MONGO_URL=mongodb://mongo:27017/newdock
