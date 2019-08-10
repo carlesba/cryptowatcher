@@ -1,26 +1,31 @@
-dev: 
-	docker-compose -f docker-compose.dev.yml build
-	docker-compose -f docker-compose.dev.yml up
+api-development: 
+	docker-compose -f docker-compose.api-development.yml build
+	docker-compose -f docker-compose.api-development.yml up
 
-dev-d:
-	docker-compose -f docker-compose.dev.yml build
-	docker-compose -f docker-compose.dev.yml up -d
+api-development-detach: 
+	docker-compose -f docker-compose.api-development.yml build
+	docker-compose -f docker-compose.api-development.yml up -d
 
-dev-down:
-	docker-compose -f docker-compose.dev.yml down
+api-development-down:
+	docker-compose -f docker-compose.api-development.yml down
 
-prod:
+production:
 	docker-compose -f docker-compose.production.yml build
 	docker-compose -f docker-compose.production.yml up
 
-prod-d:
-	docker-compose -f docker-compose.production.yml build
-	docker-compose -f docker-compose.production.yml up -d
-
-prod-down:
+production-down:
 	docker-compose -f docker-compose.production.yml down
 
 test:
-	make -C ./server test
+	make -C ./api-server test
+	make -C ./web-server test
 
-default: prod
+web-development:
+	docker-compose -f docker-compose.web-development.yml build
+	docker-compose -f docker-compose.web-development.yml up -d
+	make -C ./web-server development
+
+web-development-down:
+	docker-compose -f docker-compose.web-development.yml down
+
+default: production

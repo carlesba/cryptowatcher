@@ -8,6 +8,7 @@ let middlewareCache
 
 function connect() {
   return new Promise(function(resolve) {
+    logger.info(`[redis] host: ${REDIS_URL}`)
     client = redis.createClient(REDIS_URL)
     middlewareCache = apicache.options({ redisClient: client }).middleware
     client.on('connect', function() {

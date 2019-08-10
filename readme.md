@@ -11,11 +11,11 @@ Install docker ([Visit docker.com](https://docs.docker.com/))
 ## Running application
 
 Use make commands to start the program in containers.
-You can run the program as production or dev. Check the `Makefile` to know the commands.
+Check the `Makefile` to find detach modes.
 
-TLDR;
+### Production
 
-Start
+Start production mode
 ```
 make
 ```
@@ -23,11 +23,36 @@ make
 Stop
 
 ```
-make down
+make production-down
 ```
 
-## Run tests
+### Run tests
 
 ```
 make test
 ```
+
+### Api development
+
+Start just the api server
+```
+make api-development
+```
+
+Stop
+```
+make api-development-down
+```
+
+### Web development
+
+Start the web server with hot loader (autoupdate) and the api-server in the background
+```
+make web-development
+```
+
+Stop
+```
+make web-development-down
+```
+

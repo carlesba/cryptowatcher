@@ -1,21 +1,5 @@
 version: '2'
 services:
-  server:
-    container_name: server
-    restart: unless-stopped
-    build:
-      context: server
-      dockerfile: Dockerfile-production
-    environment:
-      - REDIS_URL=redis://cache
-      - MONGO_URL=mongodb://mongo:27017/newdock
-      - EXPRESS_PORT=4000
-      - COINMARKETCAP_APIKEY=$COINMARKETCAP_APIKEY
-    ports:
-      - '4000:4000'
-    links:
-      - mongo
-      - redis
   mongo:
     container_name: mongo
     restart: unless-stopped
@@ -27,3 +11,32 @@ services:
     container_name: cache
     expose:
       - 6379
+  api-server:
+    container_name: api-server
+    restart: always
+    build:
+      context: api-server
+      dockerfile: Dockerfile-production
+    environment:
+      - REDIS_URL=redis://cache
+      - MONGO_URL=mongodb://mongo:27017/newdock
+      - API_PORT=4000
+      - COINMARKETCAP_APIKEY=$COINMARKETCAP_APIKEY
+    volumes:
+      - './api-server:/app/api-server'
+    ports:
+      - '4000:4000'
+    links:
+      - mongo
+      - redis
+  web-server:
+    container_name: web-server
+    restart: always
+    environment:
+      - WEBSERVER_PORT=80
+    build:
+      context: web-server
+      dockerfile: Dockerfile-production
+    ports:
+      - '80:80'
+

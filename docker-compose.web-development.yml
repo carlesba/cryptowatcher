@@ -1,0 +1,31 @@
+version: '2'
+services:
+  mongo:
+    container_name: mongo
+    restart: always
+    image: mongo
+    ports:
+      - '27017:27017'
+  redis:
+    image: redis
+    container_name: cache
+    expose:
+      - 6379
+  api-server:
+    container_name: api-server
+    restart: unless-stopped
+    build:
+      context: api-server
+      dockerfile: Dockerfile-development
+    environment:
+      env_file: .env
+      REDIS_URL: redis://cache
+      MONGO_URL: mongodb://mongo:27017/newdock
+      API_PORT: 4000
+    volumes:
+      - './api-server:/app/api-server'
+    ports:
+      - '4000:4000'
+    links:
+      - mongo
+      - redis

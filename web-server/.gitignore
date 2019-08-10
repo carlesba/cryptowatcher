@@ -1,0 +1,8 @@
+# Node dependencies
+node_modules
+# build static files from Parcel bundler
+/dist
+# Mac files
+.DS_Store
+# Parcel cache
+.cache
