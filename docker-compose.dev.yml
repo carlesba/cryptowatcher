@@ -3,7 +3,9 @@ services:
   server:
     container_name: server
     restart: unless-stopped
-    build: server
+    build:
+      context: server
+      dockerfile: Dockerfile-development
     environment:
       - REDIS_URL=redis://cache
       - MONGO_URL=mongodb://mongo:27017/newdock

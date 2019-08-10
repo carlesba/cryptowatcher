@@ -23,9 +23,10 @@
     "mongodb-memory-server": "^5.1.10"
   },
   "scripts": {
-    "start": "node ./application",
+    "start": "NODE_ENV=production node ./application",
+    "dev": "NODE_ENV=development node ./application",
     "test": "jest --setupFiles ./config/tests",
-    "dev": "jest --setupFiles ./config/tests --watch"
+    "tdd": "jest --setupFiles ./config/tests --watch"
   },
   "_moduleAliases": {
     "@infrastructure": "infrastructure",
