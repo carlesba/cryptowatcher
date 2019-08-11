@@ -1,0 +1,5 @@
+.MarketQuotes td {
+  font-family: monospace;
+  padding: 5px;
+  text-align: right;
+}

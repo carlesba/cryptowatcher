@@ -86,7 +86,7 @@ export default class SubscriptionForm extends Component {
           value={state.value}
           onInput={this.handleChange}
         />
-        <button disabled={disabledButton}>Subscribe</button>
+        <button disabled={disabledButton}>Add</button>
       </form>
     )
   }

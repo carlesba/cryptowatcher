@@ -2,6 +2,7 @@ import { h, Component } from 'preact'
 import Notifications from './Notifications'
 import Selector from './Selector'
 import SubscriptionForm, { SUBSCRIPTION_FORM_ERRORS } from './SubscriptionForm'
+import MarketQuotes from './MarketQuotes'
 
 const API_ROUTE = 'http://localhost:4000/api'
 const ROUTE = `${API_ROUTE}/cryptocurrencies`
@@ -35,7 +36,8 @@ export default class Application extends Component {
         if (!jsonResponse.data.length) {
           throw new Error(GET_CRYPTOCURRENCIES_ERRORS.EMPTY)
         }
-        this.setState({ cryptocurrencies: jsonResponse.data })
+        const cryptocurrencies = jsonResponse.data
+        this.setState({ cryptocurrencies })
       })
       .catch(error => {
         let message
@@ -74,7 +76,7 @@ export default class Application extends Component {
         />
         <h1>Cryptowatch</h1>
         {isAdmin && [
-          <h2>Subscribe to a Cryptocurrencies</h2>,
+          <h2>Add a Cryptocurrency</h2>,
           <SubscriptionForm
             onSubscriptionSucceed={() => {
               this.updateCryptocurrencies()
@@ -94,6 +96,15 @@ export default class Application extends Component {
             this.setState({ selected: crypto.symbol })
           }}
         />
+
+        {state.selected && [
+          <h2>{state.selected}</h2>,
+          <MarketQuotes
+            key={state.selected}
+            forSymbol={state.selected}
+            onError={error => {}}
+          />
+        ]}
       </div>
     )
   }
@@ -103,6 +114,6 @@ function checkAdminURL() {
   return (
     window &&
     window.location &&
-    window.location.href.includes('?admin=showForm')
+    window.location.href.includes('?admin=handleSubscriptions')
   )
 }
