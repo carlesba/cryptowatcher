@@ -1,0 +1,4 @@
+{
+  "subject": "Actualización de precios de criptomonedas",
+  "body": "Aquí tienes los precios para las cryptomonedas a las <%= time %>:"
+}

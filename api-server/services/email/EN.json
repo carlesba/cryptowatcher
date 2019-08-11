@@ -1,0 +1,4 @@
+{
+  "subject": "Cryptocurrency Price Update",
+  "body": "Here you have last prices for the subscribed cryptocurrencies at <%= time %>:"
+}

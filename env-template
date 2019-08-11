@@ -2,3 +2,9 @@ COINMARKETCAP_APIKEY=
 API_URL='http://localhost:4000/api'
 API_PORT=4000
 WEBSOCKET_URL='ws://localhost:4000/live'
+
+EMAIL_USER='carolina.rogahn40@ethereal.email'
+EMAIL_PASS='5XcERRvP2PMHMg6WQq'
+EMAIL_SMTP_HOST='smtp.ethereal.email'
+EMAIL_PORT=587
+EMAIL_FROM='Carolina Rogahn <carolina.rogahn40@ethereal.email>'

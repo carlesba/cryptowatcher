@@ -4,7 +4,11 @@
 
 Get an API key for [coinMarketCap](https://coinmarketcap.com/api/)
 
-Create a `.env` file from `.env-template` and add you coinMarketCap API key
+Create a `.env` file from `.env-template`.
+
+Edit `.env` with your variables:
+- Add you coinMarketCap API key
+- Update email configuration (you can use [Ethereal](https://ethereal.email/) for testing)
 
 Install docker ([Visit docker.com](https://docs.docker.com/))
 
