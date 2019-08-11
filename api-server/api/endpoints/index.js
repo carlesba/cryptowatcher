@@ -16,6 +16,7 @@ module.exports = function startServer() {
   const middlewareCache = Redis.getMiddleware()
 
   return new Promise(function(resolve) {
+    app.disable('x-powered-by')
     router.get('/cryptocurrencies', getCryptocurrencies)
     router.post('/cryptocurrencies', jsonParser, postCryptocurrency)
     router.get(
