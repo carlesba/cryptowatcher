@@ -18,10 +18,10 @@ services:
       context: api-server
       dockerfile: Dockerfile-development
     environment:
-      env_file: .env
       REDIS_URL: redis://cache
       MONGO_URL: mongodb://mongo:27017/newdock
       API_PORT: 4000
+      COINMARKETCAP_APIKEY: $COINMARKETCAP_APIKEY
     volumes:
       - './api-server:/app/api-server'
     ports:

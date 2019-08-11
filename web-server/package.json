@@ -5,7 +5,6 @@
   "main": "server.js",
   "scripts": {
     "start": "parcel src/index.html",
-    "production": "npm run build && npm run serve",
     "build": "parcel build src/index.html",
     "serve": "node ./server.js",
     "test": "echo \"no test specified\""

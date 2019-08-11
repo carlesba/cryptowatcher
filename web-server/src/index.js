@@ -1,7 +1,8 @@
-import { h, Component, render } from 'preact'
+import { h, render } from 'preact'
+import Application from './Application'
 
-const App = () => {
-  return <div>hello world!</div>
+if (process.env.NODE_ENV === 'development') {
+  require('preact/devtools')
 }
 
-render(<App />, document.getElementById('app'))
+render(<Application />, document.getElementById('app'))

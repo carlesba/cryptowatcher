@@ -1,0 +1,6 @@
+.Selector label {
+  margin-left: 10px;
+}
+.Selector.empty span {
+  padding: 10px;
+}

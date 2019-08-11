@@ -1,0 +1,21 @@
+.Notifications {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  padding: 20px;
+  background: white;
+  display: flex;
+  border: 1px solid black;
+  border-radius: 3px;
+  max-width: 80vw;
+  box-shadow: 2px 2px 2px 0px rgba(40, 40, 40, 0.4);
+}
+
+.Notifications span {
+  font-size: 16px;
+  font-weight: bold;
+}
+.Notifications button {
+  flex-grow: 0;
+  margin-left: 20px;
+}
