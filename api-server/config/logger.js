@@ -9,7 +9,7 @@ switch (process.env.NODE_ENV) {
     level = 'none'
     break
   default:
-    level = 'debug'
+    level = 'silly'
     break
 }
 module.exports = createLogger({

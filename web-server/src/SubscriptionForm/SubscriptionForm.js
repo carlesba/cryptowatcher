@@ -1,7 +1,7 @@
 import { h, Component } from 'preact'
 
-const API_ROUTE = 'http://localhost:4000/api'
-const ROUTE = `${API_ROUTE}/cryptocurrencies`
+const { API_URL } = process.env
+const ROUTE = `${API_URL}/cryptocurrencies`
 
 export const API_ERRORS = {
   BAD_SYMBOL: 'Symbol is not valid',

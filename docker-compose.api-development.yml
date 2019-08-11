@@ -21,6 +21,8 @@ services:
       env_file: .env
       REDIS_URL: redis://cache
       MONGO_URL: mongodb://mongo:27017/newdock
+      COINMARKETCAP_APIKEY: $COINMARKETCAP_APIKEY
+      API_URL: 'http://localhost:4000/api'
       API_PORT: 4000
     volumes:
       - './api-server:/app/api-server'

@@ -4,8 +4,7 @@ import Selector from './Selector'
 import SubscriptionForm, { SUBSCRIPTION_FORM_ERRORS } from './SubscriptionForm'
 import MarketQuotes from './MarketQuotes'
 
-const API_ROUTE = 'http://localhost:4000/api'
-const ROUTE = `${API_ROUTE}/cryptocurrencies`
+const API_URL = process.env.API_URL
 const GET_CRYPTOCURRENCIES_ERRORS = {
   NETWORK: 'Network Error',
   EMPTY: 'No symbols',
@@ -25,7 +24,8 @@ export default class Application extends Component {
     this.updateCryptocurrencies()
   }
   updateCryptocurrencies() {
-    return fetch(ROUTE)
+    const route = `${API_URL}/cryptocurrencies`
+    return fetch(route)
       .then(response => {
         if (response.status >= 400) {
           throw new Error(GET_CRYPTOCURRENCIES_ERRORS.API)

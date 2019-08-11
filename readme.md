@@ -21,7 +21,6 @@ make
 ```
 
 Stop
-
 ```
 make production-down
 ```

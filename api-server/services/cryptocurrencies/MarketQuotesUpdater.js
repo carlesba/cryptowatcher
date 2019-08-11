@@ -54,7 +54,7 @@ function update(callback) {
           )
         } else {
           logger.debug('[MarketQuotesUpdater] MarketQuotes Updated')
-          callback(null)
+          callback(null, marketQuotes)
         }
       })
     })

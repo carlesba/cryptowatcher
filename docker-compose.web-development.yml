@@ -20,6 +20,8 @@ services:
     environment:
       REDIS_URL: redis://cache
       MONGO_URL: mongodb://mongo:27017/newdock
+      API_URL: 'http://localhost:4000/api'
+      WEBSOCKET_URL: 'ws://localhost:4000/live'
       API_PORT: 4000
       COINMARKETCAP_APIKEY: $COINMARKETCAP_APIKEY
     volumes:

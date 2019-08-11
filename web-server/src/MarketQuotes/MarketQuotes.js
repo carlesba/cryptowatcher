@@ -1,7 +1,8 @@
 import { h, Component } from 'preact'
 import './styles.css'
 
-const API_ROUTE = 'http://localhost:4000/api'
+const API_URL = process.env.API_URL
+const WEBSOCKET_URL = process.env.WEBSOCKET_URL
 
 export const ERRORS = {
   NOT_FOUND: 'Symbols was not found',
@@ -22,14 +23,49 @@ export default class MarketQuotes extends Component {
     this.state = {
       marketQuotes: []
     }
-    this.updateMarketQuotes = this.updateMarketQuotes.bind(this)
+    this.ws = {}
+    this.fetchHistory = this.fetchHistory.bind(this)
+    this.handleWsMessage = this.handleWsMessage.bind(this)
+    this.startWebsocket = this.startWebsocket.bind(this)
   }
   componentDidMount() {
-    this.updateMarketQuotes()
+    this.fetchHistory()
+    this.startWebsocket()
   }
-  updateMarketQuotes() {
-    const uri = `${API_ROUTE}/cryptocurrencies/${this.props.forSymbol}/history`
-    fetch(uri)
+  componentWillUnmount() {
+    this.closeWebsocket()
+  }
+  startWebsocket() {
+    this.ws = new WebSocket(WEBSOCKET_URL)
+    this.ws.onopen = () => {
+      console.log('connected to ws')
+      this.ws.send(this.props.forSymbol)
+    }
+    this.ws.onmessage = this.handleWsMessage
+  }
+  closeWebsocket() {
+    this.ws.close()
+  }
+  handleWsMessage(message) {
+    try {
+      const marketQuote = JSON.parse(message.data)
+      const marketQuotes = [marketQuote].concat(this.state.marketQuotes)
+      this.setState({ marketQuotes })
+    } catch (error) {
+      console.log('could not read websocket message')
+    }
+  }
+  fetchHistory() {
+    const route =
+      API_URL + '/cryptocurrencies/' + this.props.forSymbol + '/history'
+    fetch(route, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      mode: 'cors'
+    })
       .then(response => {
         if (response.status === 404) {
           throw new Error(ERRORS.NOT_FOUND)

@@ -20,7 +20,8 @@ services:
     environment:
       - REDIS_URL=redis://cache
       - MONGO_URL=mongodb://mongo:27017/newdock
-      - API_PORT=4000
+      - API_PORT=$API_PORT
+      - API_URL=$API_URL
       - COINMARKETCAP_APIKEY=$COINMARKETCAP_APIKEY
     volumes:
       - './api-server:/app/api-server'
@@ -34,6 +35,8 @@ services:
     restart: always
     environment:
       - WEBSERVER_PORT=80
+      - API_URL=$API_URL
+      - WEBSOCKET_URL=$WEBSOCKET_URL
     build:
       context: web-server
       dockerfile: Dockerfile-production

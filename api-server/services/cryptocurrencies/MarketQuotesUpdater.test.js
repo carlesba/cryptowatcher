@@ -50,7 +50,7 @@ test('CoinMarketCap has issues', done => {
     done()
   })
 })
-test('MarketQuotes are stored succesfully', async done => {
+test('MarketQuotes are stored succesfully and pass to the callback', async done => {
   const spy = jest.fn()
   const marketQuotes = [
     {
@@ -71,12 +71,13 @@ test('MarketQuotes are stored succesfully', async done => {
     cb(null, marketQuotes)
   })
 
-  MarketQuotesUpdater.update(async function(error) {
+  MarketQuotesUpdater.update(async function(error, data) {
     expect(error).toBe(null)
     expect(spy).toHaveBeenCalledWith([1, 1027])
 
     const quotes = await MarketQuote.find({})
     expect(quotes.length).toBe(2)
+    expect(data).toEqual(marketQuotes)
     done()
   })
 })
