@@ -59,3 +59,15 @@ Stop
 make web-development-down
 ```
 
+## Frontend App
+
+Shows a list of all cryptocurrencies being watched by the system. Select any of them to see the list of prices. The application will update the list everytime the server finds a new price.
+
+### How to add cryptocurrencies to the system
+
+Add `?admin=handleSubscriptions` to the URL. This will show a form.
+
+Fill the input with the symbol you want to add to the system. It's case sensitive.
+
+
+Add symbols to the system with
