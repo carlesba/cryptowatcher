@@ -1,5 +1,8 @@
 # Cryptowatch
 
+This is an excercise to experiment with Docker, Express, Preact and mongoose. 
+The service allows you to watch cryptocurrencies using CoinMarketCap's API.
+
 ## Getting started
 
 Get an API key for [coinMarketCap](https://coinmarketcap.com/api/)
